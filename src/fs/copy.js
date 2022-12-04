@@ -1,35 +1,29 @@
 import * as fs from 'fs';
+import * as url from 'url';
+
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 const fsPromises = fs.promises;
 
-const sourceDir = 'src/fs/files';
-const targetDir = `${sourceDir}_copy`;
-const errorMsg = 'FS operation failed';
+const sourcePath = `${__dirname}/files`;
+const targetPath = `${__dirname}/files_copy`;
+const errorMsg = 'FS operation failed'; 
 
 const copy = async () => {
-
-    fs.stat(targetDir, async (err) => {
-
-        if (err) {
-            let files;
-
-            try {
-                files = await fsPromises.readdir(sourceDir);
-            } catch (error) {
-                console.error(error);
+    fsPromises.readdir(sourcePath)
+        .then(files => {
+            fsPromises.mkdir(targetPath)
+            .catch(() => {
                 throw new Error(errorMsg);
-            }
-
-            fsPromises.mkdir(targetDir);
+            })                    
             for (const file of files) {
-                let readStream = fs.createReadStream(`${sourceDir}/${file}`);
-                let writeStream = fs.createWriteStream(`${targetDir}/${file}`);
+                let readStream = fs.createReadStream(`${sourcePath}/${file}`);
+                let writeStream = fs.createWriteStream(`${targetPath}/${file}`);
                 readStream.pipe(writeStream);
             }
-        } else {
+        })
+        .catch(() => {
             throw new Error(errorMsg);
-        }
-    })
-
+        })
 };
 
 await copy();

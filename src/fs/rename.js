@@ -1,24 +1,18 @@
 import * as fs from 'fs';
+import * as url from 'url';
+
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 const fsPromises = fs.promises;
 
-const sourceDir = 'src/fs/files/wrongFilename.txt';
-const targetDir = 'src/fs/files/properFilename.md';
+const sourcePath = `${__dirname}/files/wrongFilename.txt`;
+const targetPath = `${__dirname}/files/properFilename.md`;
 const errorMsg = 'FS operation failed';
 
 const rename = async () => {
-    fs.stat(targetDir, async (err) => {
-        if (err) {
-            try {
-                await fsPromises.rename(sourceDir, targetDir);
-              } 
-              catch (error) {
-                console.error(error);
-                throw new Error(errorMsg);
-              }
-        } else {
+    fsPromises.rename(sourcePath, targetPath)
+        .catch(() => {
             throw new Error(errorMsg);
-        }
-    })
+        }) 
 };
 
 await rename();
