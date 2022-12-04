@@ -9,7 +9,7 @@ const create = async () => {
                 if (err) throw err;
             })
         } else {
-            throw new Errow('FS operation failed')
+            throw new Error('FS operation failed');
         }
     })
    
