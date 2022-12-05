@@ -10,7 +10,9 @@ const sourcePath = `${__dirname}/files/fileToCalculateHashFor.txt`;
 const calculateHash = async () => {
     fsPromises.readFile(sourcePath, 'utf-8', { flag: 'wx'})
         .then(data => console.log(crypto.createHash('sha256').update(data).digest('hex')))
-        .catch(err => console.error(err))
+        .catch(err => {
+            throw err;
+        })
 };
 
 await calculateHash();
