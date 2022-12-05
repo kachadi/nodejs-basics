@@ -1,5 +1,18 @@
+import * as crypto from 'crypto';
+import * as fs from 'fs';
+import * as url from 'url';
+
+const fsPromises = fs.promises;
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+
+const sourcePath = `${__dirname}/files/fileToCalculateHashFor.txt`;
+
 const calculateHash = async () => {
-    // Write your code here 
+    fsPromises.readFile(sourcePath, 'utf-8', { flag: 'wx'})
+        .then(data => console.log(crypto.createHash('sha256').update(data).digest('hex')))
+        .catch(err => {
+            throw err;
+        })
 };
 
 await calculateHash();
