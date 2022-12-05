@@ -4,12 +4,11 @@ import { release, version } from 'os';
 import { createServer as createServerHttp }  from 'http';
 import { createRequire } from 'module';
 import './files/c.js';
-import { dirname } from 'path';
 
 const require = createRequire(import.meta.url);
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
-const __filename = dirname(__dirname);
+const __filename = path.dirname(__dirname);
 
 const random = Math.random();
 
