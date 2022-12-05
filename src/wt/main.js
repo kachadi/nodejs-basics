@@ -13,9 +13,9 @@ const performCalculations = async () => {
     const resultsFromWorkers = await Promise.allSettled(CPU_CORES.map(() => {
         return new Promise((res, rej) => {
             const worker = new Worker(workerPath, { workerData: incrementalNum++ });
-            worker.on('message', msg => res(msg))
-            worker.on('error', err => rej(err))
-        })
+            worker.on('message', msg => res(msg));
+            worker.on('error', err => rej(err));
+        });
     }))
 
     const resultsArr = resultsFromWorkers.map(({ status, value }) => {
@@ -31,8 +31,6 @@ const performCalculations = async () => {
     });
 
     console.log(resultsArr);
-
-
 };
 
 await performCalculations();
